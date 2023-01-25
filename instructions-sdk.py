@@ -53,7 +53,6 @@ class Drone:
     def rotate(self, angle):
         # Rotate the drone clockwise by the specified angle
         self.tello.rotate_clockwise(angle)
-        tello.send_command_with_return
         # Append the reverse command to the reverse list
         self.reverse.append(self.tello.rotate_counter_clockwise(angle))
         # Wait for the clapping event to be set
