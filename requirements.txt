@@ -1,0 +1,4 @@
+djitellopy
+sounddevice
+numpy
+pynput
