@@ -51,6 +51,9 @@ class Drone:
         self.tello.land()
 
     def rotate(self, angle):
+        # Check if the drone should accept more commands
+        if not self.acceptCommands:
+            return
         # Rotate the drone clockwise by the specified angle
         self.tello.rotate_clockwise(angle)
         # Append the reverse command to the reverse list
