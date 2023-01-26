@@ -19,24 +19,31 @@ class Drone:
         self.acceptCommands = True
         # Create an Event object to signal clapping detection
         self.clapping = threading.Event()
-        # Start a separate thread to detect clapping sounds
-        monitor_thread = threading.Thread(target=self.detect_loud_noise, args=self)
-        monitor_thread.start()
+        #when esc is pressed this will be true
+        self.halt = False
+        listener = keyboard.Listener(on_press=self.on_press)
+        listener.start()
+       # Start a separate thread to detect clapping sounds
+        #monitor_thread = threading.Thread(target=self.detect_loud_noise, args=self)
+        #monitor_thread.start()
+    def on_press(self,key):
+        if key == keyboard.Key.esc:
+            self.halt = True
 
     def forward(self, forwardAmount):
         # Check if the drone should accept more commands
         if not self.acceptCommands:
             return
         # Move the drone forward by the specified amount
-        self.tello.move_forward(forwardAmount)
+        value = self.tello.move_forward(forwardAmount)
         # Append the reverse command to the reverse list
-        self.reverse.append(self.tello.move_forward(forwardAmount))
+        self.reverse.append((self.tello.move_forward, forwardAmount))
         # Wait for the clapping event to be set
-        self.clapping.wait()
+        # self.clapping.wait()
         # Clear the event
-        self.clapping.clear()
+        #self.clapping.clear()
         # Check if the clapping event is set
-        if self.clapping.is_set():
+        if self.halt:
             # Set the acceptCommands flag to false
             self.acceptCommands = False
             # Execute the reverse path
@@ -50,20 +57,42 @@ class Drone:
         # Land the drone
         self.tello.land()
 
-    def rotate(self, angle):
+    def connect(self):
+        self.tello.connect(False)
+
+    def rotateCW(self, angle):
         # Check if the drone should accept more commands
         if not self.acceptCommands:
             return
         # Rotate the drone clockwise by the specified angle
         self.tello.rotate_clockwise(angle)
         # Append the reverse command to the reverse list
-        self.reverse.append(self.tello.rotate_counter_clockwise(angle))
+        self.reverse.append((self.tello.rotate_counter_clockwise, angle))
         # Wait for the clapping event to be set
-        self.clapping.wait()
+        # self.clapping.wait()
         # Clear the event
-        self.clapping.clear()
+        #self.clapping.clear()
         # Check if the clapping event is set
-        if self.clapping.is_set():
+        if self.halt:
+            # Set the acceptCommands flag to false
+            self.acceptCommands = False
+            # Execute the reverse path
+            self.DoReversePath()
+
+    def rotateCCW(self, angle):
+        # Check if the drone should accept more commands
+        if not self.acceptCommands:
+            return
+        # Rotate the drone clockwise by the specified angle
+        self.tello.rotate_counter_clockwise(angle)
+        # Append the reverse command to the reverse list
+        self.reverse.append((self.tello.rotate_clockwise, angle))
+        # Wait for the clapping event to be set
+        # self.clapping.wait()
+        # Clear the event
+        #self.clapping.clear()
+        # Check if the clapping event is set
+        if self.halt:
             # Set the acceptCommands flag to false
             self.acceptCommands = False
             # Execute the reverse path
@@ -74,7 +103,8 @@ class Drone:
         self.tello.rotate_clockwise(180)
         # Execute the reverse commands
         while self.reverse.__len__() > 0:
-            (self.reverse.pop())()
+            func = self.reverse.pop()
+            func[0](*func[1:])
         # Land the drone
         self.tello.land()
 
@@ -93,14 +123,13 @@ class Drone:
             # Check if the maximum decibels is above 20
             if max_decibels > 20:
                 # Set the clapping event
+                print("clap set")
                 self.clapping.set()
 
 
-# def on_press(key):
-#     # tello.land()
-#     print("stop")
-#     global stop
-#     stop = True
+
+
+
 
 
 # def on_release(key):
@@ -110,8 +139,7 @@ class Drone:
 # tello.connect(False)
 # tello.takeoff()
 
-# listener = keyboard.Listener(on_press=on_press, on_release=on_release)
-# listener.start()
+
 
 
 # while not stop:
