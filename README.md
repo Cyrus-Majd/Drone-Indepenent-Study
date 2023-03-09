@@ -1,6 +1,6 @@
 # Drone-Indepenent-Study
 
-    Making a Drone do search and detection automatically for mass deployment.
+Making a Drone do search and detection automatically for mass deployment.
 
 # Summary
 
