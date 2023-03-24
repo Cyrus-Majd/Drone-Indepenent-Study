@@ -8,6 +8,12 @@ The project aims to develop a drone capable of conducting autonomous search and 
 
 ## TO DO
 
+    - Making the drone using ArduPilot
+        - Make Drone using flight controller and connect it up to a raspberry pi
+        - Get equipment
+        - https://www.thingiverse.com/make:901017
+        - https://www.thingiverse.com/thing:753840
+    - Get a drone license
     - GPS
         - Drone can make path
         - Drone can travel path
@@ -24,3 +30,10 @@ The project aims to develop a drone capable of conducting autonomous search and 
         - Drone should be able to be controlled from a API
         - Drone needs to have a way of conforming its control
         - Need to map space where drone is
+
+## Key points
+
+    Getting tello movements working
+    PWM testing on leds
+    DJI Drone no longer an option
+    Turning to DIY Drone
