@@ -2,3 +2,4 @@ djitellopy
 sounddevice
 numpy
 pynput
+pyGPs
