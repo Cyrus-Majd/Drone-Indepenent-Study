@@ -9,22 +9,22 @@ class Drone_Control:
         print("climbing " + amount)
         pass
 
-    def descending(self, amount):
+    def descend(self, amount):
         amount = amount * self.multiplier
 
         print("descending " + amount)
         pass
 
-    def turn_right(self, radius):
-        radius = radius * self.multiplier
+    def turn_right(self, deg):
+        deg = deg * self.multiplier
 
-        print("turning right" + radius)
+        print("turning right" + deg)
         pass
 
-    def turn_left(self, radius):
-        radius = radius * self.multiplier
+    def turn_left(self, deg):
+        deg = deg * self.multiplier
 
-        print("turning left" + radius)
+        print("turning left" + deg)
         pass
 
     def forwards(self, amount):
