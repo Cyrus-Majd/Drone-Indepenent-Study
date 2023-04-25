@@ -1,4 +1,8 @@
 import requests, math
+import PIL
+from PIL import Image
+from io import BytesIO
+
 
 api_key = "AIzaSyDOUOjCUfAoWjm7pAsSDnwqXgXPZeaylQY"
 hill_coords = (40.52200411620839, -74.46292879108148)
@@ -63,13 +67,22 @@ def plot_path_on_google_maps(coords_list, api_key):
         path_params += f"|{lat},{lon}"
 
     # Add the API key to the URL
-    url = f"{base_url}{path_params}&key={api_key}"
+    width, height = 640, 640
+    url = f"{base_url}{path_params}&size={width}x{height}&key={api_key}"
 
     # Send a HTTP GET request to the Google Maps API
     response = requests.get(url)
 
+    print(response.content)
+
+    # Try opening the image from the response with PIL
+    try:
+        img = Image.open(BytesIO(response.content))
+    except PIL.UnidentifiedImageError:
+        print("Response content is not valid image data.")
+        return
+
     # Save the image to a file
-    with open("path.png", "wb") as f:
-        f.write(response.content)
+    img.save(filename)
 
 plot_path_on_google_maps(square_search(hill_coords[0],hill_coords[1],10,1), api_key)
